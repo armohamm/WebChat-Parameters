@@ -1,4 +1,4 @@
-var MyWebChat = function(params) {
+var WebChat = function(params) {
     var user = {
         id: params['userId'] || 'userId',
         name: params["username"] || 'username'
@@ -27,7 +27,7 @@ var MyWebChat = function(params) {
          **/
         var event = {
             type: "event",
-            value: params['customArg'],
+            value: params['myCustomArg'],
             from: {
                 id: params['userId']
             },
