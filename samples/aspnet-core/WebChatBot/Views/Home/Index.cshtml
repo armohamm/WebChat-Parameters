@@ -1,0 +1,21 @@
+﻿@model BotConfigModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div id="botChat"></div>
+<script src="https://cdn.botframework.com/botframework-webchat/latest/botchat.js"></script>
+<script src="~/js/webchat.js"></script>
+<script>
+    var params = {
+        userId:'userid',
+        username:'you',
+        botId: '<YOUR_BOT_ID>',
+        botName:'<YOUR_BOT_NAME>',
+        targetElement: 'botChat', // html element where the webchat gets rendered
+        secret: '<YOUR_WEBCHAT_SECRET>',
+        myCustomArg: '@Model.Token'
+    };   
+
+    new WebChat(params).loadApplication();
+</script>
