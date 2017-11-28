@@ -38,6 +38,67 @@ The repo has the following folders:
 
 ![ASP.NET Core MVC sample](./images/img-01.JPG)
 
+# Bot Events
+
+The `webchat.js` has a function to post an event with the custom parameters to the bot session:
+
+```js
+var event = {
+    type: "event",
+    value: params['myCustomArg'],
+    from: {
+        id: params['userId']
+    },
+    name: "customArgName"
+};
+
+var sendCustomArg = function() {
+    botConnection.postActivity(event).subscribe();
+}
+
+sendCustomArg();
+```
+
+This is how you can manage the event in C# (`MessagesController.cs` file):
+
+```csharp
+private static async Task<Activity> HandleSystemMessage(Activity message)
+{
+    if (message.Type == "event")
+    {
+        var connector = new ConnectorClient(new Uri(message.ServiceUrl));
+
+        var reply = message.CreateReply("Event name: " + message.Name);
+        await connector.Conversations.ReplyToActivityAsync(reply);
+
+        reply = message.CreateReply("Event value: " + message.Value);
+        await connector.Conversations.ReplyToActivityAsync(reply);
+    }
+    
+    return null;
+}
+```
+
+In Node.js:
+
+```js
+bot.on("event", function (event) {
+    var reply = new builder.Message()
+        .address(message.address)
+        .text('Event name: ' + event.name);
+
+    bot.send(reply);
+
+    reply = new builder.Message()
+        .address(message.address)
+        .text('Event value: ' + event.value);
+
+    bot.send(reply);
+});
+```
+
+After deploying your bot and adding the WebChat channel support, don't forget to copy the **WebChat Secret** and paste it in your HTML script :)
+
 # Microsoft OSS Code Of Conduct Notice #
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
